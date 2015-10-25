@@ -1,11 +1,26 @@
-## Put comments here that give an overall description of what your
-## functions do
+###Andy Timmons
+### Programming Assignment 2- R Programming 033
+###10/25/15
 
-## Write a short comment describing this function
+
+## This creates a new object that is able to cache and store the inverse of the matrix.
+
+##usage : A <- makeCacheMatrix(matrix)
+
+# A$get() returns the matrix submitted
+# A$set(matrix) sets A to a new matrix
+# A$setinv() is an internal function and likely shouldnt be called
+# A$getinv() returns the cached value of the inverse matrix of A$$matrix. 
+#   -returns null if this has not been computed
+#   -call cacheSolve to take advantage of the cached function and to compute a new inverse matrix.
 
 makeCacheMatrix <- function(X = matrix()) {
   #require(matrixcalc)
 M <- NULL
+
+
+# function wrappers inside makeCacheMatrix --------------------------------
+
 
   fset <- function(Y) {
               X <<- Y
@@ -19,21 +34,38 @@ M <- NULL
   fgetinv<- function() return(M)
   
   
-list(set = fset, get = fget, setinv = fsetinv, getinv = fgetinv)
+list(set = fset, get = fget, setinv = fsetinv, getinv = fgetinv)  #set the list of attributes that we can call,
+#each attribute is actually a wrapper for a function
 }
 
-## Write a short comment describing this function
+## This function checks to see if the inverse matrix solution exists, if so it returns that value
+# if it does not exist, it calculates it, returns it and then stores it using the A$setinv() function
 
-cacheSolve <- function(x, ...) {
+
+
+# Second Function- Cache Solve --------------------------------------------
+
+
+cacheSolve <- function(input, ...) {
         ## Return a matrix that is the inverse of 'x
    #makeCacheMatrix(x)
-M <- x$getinv()
+M <- input$getinv()
+
+#check for cached values and return out if found
 if(!is.null(M)){
   message("getting cached data")
   return(M)
-  }
-data <- x$get()
+}
+
+#otherwise, we'll run this, first get the information of the matrix we'll operate on
+data <- input$get()  
+#now solve the inverse matrix using the solve(matrix) command
 M <- solve(data)
-x$setinv(M)
+#now set the new value into our object
+input$setinv(M)
+#return the inverse matrix (same as above)
 return(M)
 }
+
+#fin
+
